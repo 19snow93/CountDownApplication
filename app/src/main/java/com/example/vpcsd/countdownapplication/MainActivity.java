@@ -90,15 +90,15 @@ public class MainActivity extends AppCompatActivity {
             resultListBean.setProductTypes("键盘");
             resultListBean.setStartTime("2016-11-01 15:40:53");
             resultListBean.setEndTime("2017-01-10 15:40:53");
-            resultListBean.setPrice("30-186");
             resultListBean.setNowTime("2016-12-04 15:24:53");
             resultListBean.setmType(1);
             mActivitiesList.add(resultListBean);
         }
 
+        //遍历所有数据，算出时间差并保存在每个商品的counttime属性内
         for(int i = 0;i < mActivitiesList.size(); i++){
-        //    mActivitiesList.get(i).setmType(mType);
-            long counttime = SystemUtil.timeDifference(mActivitiesList.get(i).getNowTime(),mActivitiesList.get(i).getEndTime());
+            long counttime = SystemUtil.timeDifference(mActivitiesList.get(i).getNowTime()
+                    ,mActivitiesList.get(i).getEndTime());
             mActivitiesList.get(i).setCountTime(counttime);
         }
         timeThread = new MyThread(mActivitiesList);
@@ -110,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(Message msg){
             switch (msg.what){
                 case 1:
+                    //刷新适配器
+                //    mRecommendActivitiesAdapter.notifyDataSetChanged();
+                    //优化刷新adapter的方法
                     mRecommendActivitiesAdapter.notifyData();
                     break;
             }
@@ -118,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
     class MyThread implements Runnable{
+        //用来停止线程
         boolean endThread;
         List<RecommendActivitiesBean.ResultListBean> mRecommendActivitiesList;
 
@@ -131,19 +135,25 @@ public class MainActivity extends AppCompatActivity {
                 try{
                     Thread.sleep(1000);
                     for(int i = 0;i < mRecommendActivitiesList.size();i++){
+                        //拿到每件商品的时间差，转化为具体的多少天多少小时多少分多少秒
+                        //并保存在商品time这个属性内
                         long counttime = mRecommendActivitiesList.get(i).getCountTime();
                         long days = counttime / (1000 * 60 * 60 * 24);
                         long hours = (counttime-days*(1000 * 60 * 60 * 24))/(1000* 60 * 60);
                         long minutes = (counttime-days*(1000 * 60 * 60 * 24)-hours*(1000* 60 * 60))/(1000* 60);
                         long second = (counttime-days*(1000 * 60 * 60 * 24)-hours*(1000* 60 * 60)-minutes*(1000*60))/1000;
+                        //并保存在商品time这个属性内
                         String finaltime = days + "天" + hours + "时" + minutes + "分" + second + "秒";
+                        mRecommendActivitiesList.get(i).setTime(finaltime);
+                        //如果时间差大于1秒钟，将每件商品的时间差减去一秒钟，
+                        // 并保存在每件商品的counttime属性内
                         if(counttime > 1000) {
                             mRecommendActivitiesList.get(i).setCountTime(counttime - 1000);
-                            mRecommendActivitiesList.get(i).setTime(finaltime);
                         }
                     }
                     Message message = new Message();
                     message.what = 1;
+                    //发送信息给handler
                     handler.sendMessage(message);
                 }catch (Exception e){
 

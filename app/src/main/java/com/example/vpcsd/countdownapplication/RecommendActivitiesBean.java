@@ -95,18 +95,23 @@ public class RecommendActivitiesBean {
         private String name;
         private String picAPP;
         private String present;
-        private String sort;
         private String productSource;
         private String productTypes;
         private String price;
+        //活动开始时间
         private String startTime;
+        //活动结束时间
         private String endTime;
         private Object productPager;
         private String startLongTime;
         private String endLongTime;
         private String nowLongTime;
+        //系统时间
         private String nowTime;
+        //算出活动结束时间和当前系统时间的时间差，用ms为单位
         private long countTime;
+        //存储每个商品的倒计时的具体时间格式，并最后用TextView显示，
+        // 如"42天2时58分20秒"
         private String time;
         private int mType;
 
@@ -212,14 +217,6 @@ public class RecommendActivitiesBean {
 
         public void setPresent(String present) {
             this.present = present;
-        }
-
-        public String getSort() {
-            return sort;
-        }
-
-        public void setSort(String sort) {
-            this.sort = sort;
         }
 
         public String getProductSource() {

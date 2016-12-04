@@ -84,15 +84,17 @@ public class SystemUtil {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         long diff = 0;
         try {
+            //系统时间转化为Date形式
             Date dstart = format.parse(nowtime);
+            //活动结束时间转化为Date形式
             Date dend = format.parse(endtime);
+            //算出时间差，用ms表示
             diff = dend.getTime() - dstart.getTime();
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
+        //返回时间差
         return diff;
-
     }
 
     public static boolean isCelPhoneNo(String celPhone) {

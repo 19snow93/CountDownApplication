@@ -52,11 +52,10 @@ public class RecommendActivitiesAdpater extends RecyclerView.Adapter<RecommendAc
 
     @Override
     public void onBindViewHolder(final RecommendActivitiesAdpater.MyViewHolder holder, final int position) {
-
-        if(getItemViewType(position) == TYPE_FOOT)
-            return;
-
+        //用holder绑定对应的position
         holder.setDataPosition(position);
+        //判断list里面是否含有该holder，没有就增加
+        //因为list已经持有holder的引用，所有数据自动会改变
         if(!(myViewHolderList.contains(holder))){
             myViewHolderList.add(holder);
         }
@@ -116,11 +115,11 @@ public class RecommendActivitiesAdpater extends RecyclerView.Adapter<RecommendAc
         }
     }
 
+    //遍历list，刷新相应holder的TextView
     public void notifyData(){
         for(int i = 0;i < myViewHolderList.size(); i++){
-            if(data.get(myViewHolderList.get(i).position).getmType() == 1)
-                myViewHolderList.get(i).tvRecommendActivitiesStartTime
-                        .setText(data.get(myViewHolderList.get(i).position).getTime());
+            myViewHolderList.get(i).tvRecommendActivitiesStartTime
+                    .setText(data.get(myViewHolderList.get(i).position).getTime());
         }
     }
 
@@ -138,20 +137,19 @@ public class RecommendActivitiesAdpater extends RecyclerView.Adapter<RecommendAc
     {
         private LinearLayout llRecommendActivities;
         private ImageView ivRecommendActivitiesPic;
-        private TextView tvRecommendActivitiesTitle;
-        private TextView tvRecommendActivitiesCategory;
-        private TextView tvRecommendActivitiesStartTime;
-        private TextView tvRecommendActivitiesMoney;
-        private TextView tvRecommendActivitiesTime;
-        private TextView tvRecommendActivitiesPanic;
+        private TextView tvRecommendActivitiesTitle,tvRecommendActivitiesCategory
+                ,tvRecommendActivitiesStartTime,tvRecommendActivitiesMoney,tvRecommendActivitiesTime
+                ,tvRecommendActivitiesPanic;
         private ImageView ivRecommendActivityEndBac;
         private int position;
+
+        private void setDataPosition(int position){
+            this.position = position;
+        }
 
         public MyViewHolder(View view)
         {
             super(view);
-            if(view == footerView)
-                return;
             llRecommendActivities = (LinearLayout) view.findViewById(R.id.ll_recommend_activities);
             ivRecommendActivitiesPic = (ImageView) view.findViewById(R.id.iv_recommend_activities_pic);
             tvRecommendActivitiesTitle = (TextView) view.findViewById(R.id.tv_recommend_activities_title);
@@ -163,9 +161,6 @@ public class RecommendActivitiesAdpater extends RecyclerView.Adapter<RecommendAc
             ivRecommendActivityEndBac = (ImageView) view.findViewById(R.id.iv_recommend_activities_pic_end);
         }
 
-        private void setDataPosition(int position){
-            this.position = position;
-        }
     }
 
 
